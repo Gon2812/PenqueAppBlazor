@@ -1,0 +1,1 @@
+C:\Users\gcane\source\repos\PenqueAppMobile\PenqueAppMobile\PenqueAppMobile.csproj;x64

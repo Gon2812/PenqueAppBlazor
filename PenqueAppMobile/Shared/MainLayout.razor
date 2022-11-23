@@ -1,0 +1,87 @@
+﻿@using PenqueAppMobile.Models
+@inherits LayoutComponentBase
+@inject NavigationManager NavManager;
+
+<body style='background-image: url("https://i.imgur.com/d3AgpEA.jpeg");background-size: auto;'>
+
+    <header class="flex-wrap align-items-center justify-content-center justify-content-md-between">
+        <div class="navbar-container" style="background: linear-gradient(90deg, rgba(110,255,205,1) 0%, rgba(12,250,127,1) 35%, rgba(0,212,255,1) 100%)">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="grid-template-columns: 1fr 2fr;">
+                <div class="logo-container px-5">
+                    <a routerLink='/dashboard'>
+                        <img src="https://i.ibb.co/2YWQBfQ/sketch1664150883140.png" alt="" style="transform: matrix(1.88245, 0, 0, 1.88245, 0, 0); transform-origin: 50% 50%; max-height: none; transition: transform 200ms ease-in-out 0s;" width="80" height="60" viewBox="0 0 6060 1800">
+                    </a>
+                </div>
+                <div class="col-md-3 text-end px-5">
+                    @if (Setting.UserBasicDetail != null)
+                    {
+                        //<input type="button" @onclick="home" title="Menu Principal" width="auto" height="auto"/>
+                        //<input type="button" @onclick="signOut" title="Cerrar Sesion" width="auto" height="auto"/>
+                        <button type="button" class="btn btn-outline-priary me-2" @onclick="home">Menu Principal</button>
+                        <button type="button" class="btn btn-primary" @onclick="signOut">Cerrar Sesion</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-priary me-2" @onclick="login">Iniciar Sesión</button>
+                        <button type="button" class="btn btn-primary" @onclick="signUp">Registrarse</button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="filter-container">
+            <app-places-filter></app-places-filter>
+        </div>
+    </header>
+
+
+    <div class="page">
+        <!--<img src="https://i.imgur.com/d3AgpEA.jpeg" class="card-img-overlay" />-->
+
+        <main>
+            <!--<div class="top-row px-4">
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>-->
+
+            <article class="content px-4">
+                @Body
+
+            </article>
+        </main>
+    </div>
+
+
+    <footer class="footer" style="background-color:#555555">
+        <div class="container footer-container">
+            <div class="footer-first-item">
+                <div class="footer-logo-container">
+                    <img src="https://i.ibb.co/2YWQBfQ/sketch1664150883140.png" alt="" style="transform: matrix(1.88245, 0, 0, 1.88245, 0, 0); transform-origin: 50% 50%; max-height: none; transition: transform 200ms ease-in-out 0s;" width="120" height="90" viewBox="0 0 6060 1800">
+
+                    <p style="color:whitesmoke;">Juega en las pencas del momento.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright" style="color:whitesmoke; font-size:smaller; justify-self:center;"><p align="center">© Copyright 2022, PenqueApp</p></div>
+    </footer>
+</body>
+
+@code
+{
+    private void login()
+    {
+        NavManager.NavigateTo("/login");
+    }
+    private void signUp()
+    {
+        NavManager.NavigateTo("/registration");
+    }
+    private void home()
+    {
+        NavManager.NavigateTo("/dashboard");
+    }
+    private void signOut()
+    {
+        SecureStorage.RemoveAll();
+        Setting.UserBasicDetail = null;
+        NavManager.NavigateTo("/login");
+    }
+}

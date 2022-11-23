@@ -1,0 +1,149 @@
+﻿@page "/";
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject NavigationManager NavManager;
+@inject IAppService AppService
+
+
+1@{
+    var listaP = AsyncUtil.RunSync<List<PencaCompartida>>(() => GetListAsync());
+}
+
+<div class="text-center mt-2">
+    <div class="mt-2 text-end">
+        <NavLink class="nav-link" href="login">
+            <span>Iniciar Sesion</span>
+        </NavLink>
+    </div>
+    <div class="mt-2 text-end">
+        <NavLink class="nav-link" href="registration">
+            <span>Registrarse</span>
+        </NavLink>
+    </div>
+</div>
+
+
+    <div class="container">
+        @foreach (var penca in listaP)
+        {
+            <mat-card class="penca-card">
+                <div class="penca-card-content">
+                    <div class="penca-card-image">
+                        @if (penca.tipoDeporte.ToString().Equals("Futbol"))
+                        {
+                            <img src="https://img.freepik.com/vector-premium/logotipo-futbol-boot-patea-pelota-ilustracion-vectorial_183342-393.jpg">
+                        }
+                        else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
+                        {
+                            <img src="https://img.freepik.com/premium-vector/basketball-logo_260747-419.jpg">
+                        }
+                        else if (penca.tipoDeporte.ToString().Equals("Tenis"))
+                        {
+                            <img src="https://img.freepik.com/premium-vector/tennis-logo-icon-design-sports-badge-template-vector-illustration_630259-74.jpg">
+                        }
+                        else if (penca.tipoDeporte.ToString().Equals("Voley"))
+                        {
+                            <img src="https://i.pinimg.com/736x/9c/c2/05/9cc20507041e1dbfc1f772ac42b43390.jpg">
+                        }
+                        else
+                        {
+                            <img src="https://i.pinimg.com/originals/6f/35/0d/6f350d177d15776f7874b5c4d0e68a5b.jpg">
+                        }
+                    </div>
+                    <div class="penca-card-content-title">
+                        <p style="color:white">@penca.nombre</p>
+                    </div>
+                    @if (penca.tipoDeporte.ToString().Equals("Futbol"))
+                    {
+                        <div class="penca-card-content-address mat-hint">
+                        <p style="color:white">Deporte: Futbol</p>
+                        </div>
+                    }
+                    else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
+                    {
+                        <div class="penca-card-content-address mat-hint">
+                        <p style="color:white">Deporte: Basketball</p>
+                        </div>
+                    }
+                    else if (penca.tipoDeporte.ToString().Equals("Tenis"))
+                    {
+                        <div class="penca-card-content-address mat-hint">
+                        <p style="color:white">Deporte: Tenis</p>
+                        </div>
+                    }
+                    else if (penca.tipoDeporte.ToString().Equals("Voley"))
+                    {
+                        <div class="penca-card-content-address mat-hint">
+                        <p style="color:white">Deporte: Voley</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="penca-card-content-address mat-hint">
+                        <p style="color:white">Deporte: Competencia</p>
+                        </div>
+                    }
+                    <div class="penca-card-content-price">
+                    <p style="color:white">Precio: <span>$@penca.entrada</span></p>
+                    </div>
+                    @*"Dashboard, Partido y Competencia especifico y mensajeria"*@
+                    <br>
+                    <div class="penca-card-content-button">
+                        <button class="btn btn-success" @onclick="() => verPenca(penca.id)">Detalles</button>                    
+                    </div>
+                </div>
+            </mat-card>
+        }
+    </div>
+
+@code {
+    private async void verPenca(int id)
+    {
+        var response = await AppService.SeleccionarPencaC(id);
+        if (response.nombre != null)
+        {
+            var penca = new PencaCompartida
+            {
+                id = response.id,
+                nombre = response.nombre,
+                tipoDeporte = response.tipoDeporte,
+                entrada = response.entrada,
+                pozo = response.pozo,
+                idLiga = response.idLiga,
+                tipo_Liga = response.tipo_Liga,
+                estado = response.estado
+            };
+
+            string infoPencaC = JsonConvert.SerializeObject(penca);
+            await SecureStorage.SetAsync(nameof(Setting.PencaCompartidaDetail), infoPencaC);
+            Setting.PencaCompartidaDetail = penca;
+            NavManager.NavigateTo("/infoPenca");
+        }
+        else
+        {
+            NavManager.NavigateTo("/");
+        }
+        //this.StateHasChanged();
+    }
+
+    private async Task<List<PencaCompartida>> GetListAsync()
+    {
+        List<PencaCompartida> listaP = await Task.Run(() => AppService.ListaPencasCompartidas());
+
+        return listaP;
+    }
+    protected async override Task OnInitializedAsync()
+    {
+        string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
+
+        if (!string.IsNullOrWhiteSpace(userDetailsStr))
+        {
+            var userBasicDetail = JsonConvert.DeserializeObject<Usuario>(userDetailsStr);
+        }
+        else
+        {
+            NavManager.NavigateTo("/");
+        }
+    } 
+}

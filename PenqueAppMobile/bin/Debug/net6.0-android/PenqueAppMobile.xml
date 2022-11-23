@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PenqueAppMobile</name>
+    </assembly>
+    <members>
+        <member name="M:PenqueAppMobile.Models.AsyncUtil.RunSync(System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Executes an async Task method which has a void return value synchronously
+            USAGE: AsyncUtil.RunSync(() => AsyncMethod());
+            </summary>
+            <param name="task">Task method to execute</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:PenqueAppMobile.Models.AsyncUtil.RunSync``1(System.Func{System.Threading.Tasks.Task{``0}})" -->
+    </members>
+</doc>

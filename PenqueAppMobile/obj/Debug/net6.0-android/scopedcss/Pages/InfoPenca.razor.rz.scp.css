@@ -1,0 +1,12 @@
+body[b-nofvntq32w] {
+}
+
+.container[b-nofvntq32w] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 5px;
+}
+
+.fcc-btn[b-nofvntq32w] {
+    margin-bottom: 50px;
+}

@@ -1,0 +1,86 @@
+﻿@page "/infoPenca"
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject IAppService AppService
+
+@{
+    var penca = Setting.PencaCompartidaDetail;
+    var liga = AsyncUtil.RunSync<int>(() => GetLigas(penca.id));
+}
+
+<section class="container center-vh">
+    <mat-card class="pencas-card">
+    <mat-list>
+      @if(penca.tipo_Liga == 0){
+          <h2 class="mat-h1 text-center colorP">Partidos</h2>
+      }
+      else{
+          <h2 class="mat-h1 text-center colorP">Competencias</h2>
+      }
+      <div class="dashboard"><button mat-stroked-button class="enabled" style="margin-left:5px">Ver Dashboard</button>
+      </div>
+      @{
+          if(penca.tipo_Liga == 0)
+          {
+              var pc = AsyncUtil.RunSync<List<Partido>>(() => GetPartidos(liga));
+              foreach(var partido in pc)
+              {
+                  <div class="row">
+                      <div class="col-3"></div>
+                      <div class="col">
+                          <div class="">
+                              <h4 class="mb-1">@partido.fecha</h4>
+                              <small class="text-muted">@partido.local <span>VS.</span>@partido.visitante</small>
+                          </div>
+                      <p class="mb-1"></p>
+                      </div>
+                  </div>
+              }
+          }
+          else
+          {
+              var pc = AsyncUtil.RunSync<List<Competencia>>(() => GetCompetencias(liga));
+              foreach(var competencia in pc)
+              {
+                  <div class="row">
+                      <div class="col-3"></div>
+                      <div class="col">
+                          <div class="">
+                         <h4 class="mb-1">@competencia.fecha_competencia</h4>
+                         <small class="text-muted">@competencia.nombre</small>
+                      </div>
+                      <p class="mb-1"></p>
+                      </div>
+                  </div>
+              }
+          }
+      }
+    </mat-list>
+  </mat-card>
+</section>
+
+
+@code {
+    private async Task<int> GetLigas(int idPenca)
+    {
+        int liga = await Task.Run(() => AppService.verLiga(idPenca));
+
+        return liga;
+    }
+
+
+
+    private async Task<List<Partido>> GetPartidos(int idLiga)
+    {
+        List<Partido> listaP = await Task.Run(() => AppService.ListaPartidos(idLiga));
+
+        return listaP;
+    }
+
+    private async Task<List<Competencia>> GetCompetencias(int idLiga){
+        List<Competencia> listaC = await Task.Run(() => AppService.ListaCompetencias(idLiga));
+
+        return listaC;
+    }
+}

@@ -1,0 +1,81 @@
+﻿@page "/login"
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using System.Security.Claims
+@using Newtonsoft.Json
+@inject IAppService AppService;
+@inject NavigationManager NavManager;
+
+
+<EditForm Model="@loginModel" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <h3>Login</h3>
+        <div class="form-group">
+            <label>Email address</label>
+            <input type="email" @bind-value="loginModel.Email" class="form-control" placeholder="Enter email">
+            <ValidationMessage For="@(()=> loginModel.Email)" />
+        </div>
+        <div class="mt-2 form-group">
+            <label>Password</label>
+            <input type="password" @bind-value="loginModel.Password" class="form-control" placeholder="Password">
+            <ValidationMessage For="@(()=> loginModel.Password)" />
+        </div>
+
+        <div class="mt-2 text-end">
+            <NavLink class="nav-link" href="registration">
+                <span>Click here to create new account?</span>
+            </NavLink>
+        </div>
+
+        <div class="text-center mt-2">
+            <button class="btn btn-primary" type="submit">
+                <span class="@_spinnerClass" role="status" aria-hidden="true"></span>
+                SignIn
+            </button>
+            <a class="fcc-btn" href="">Atras</a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    LoginModel loginModel = new();
+
+    private string _spinnerClass = "";
+    private async void Submit()
+    {
+        _spinnerClass = "spinner-border spinner-border-sm";
+        var response = await AppService.AuthenticateUser(loginModel);
+        if (response.nombre != null)
+        {
+            if (response.tipo_rol == 2)
+            {
+                var usuario = new Usuario
+                    {
+                        id = response.id,
+                        nombre = response.nombre,
+                        email = response.email,
+                        billetera = response.billetera,
+                        tipo_rol = response.tipo_rol
+                    };
+
+
+                string userBasicInfoStr = JsonConvert.SerializeObject(usuario);
+                await SecureStorage.SetAsync(nameof(Setting.UserBasicDetail), userBasicInfoStr);
+                Setting.UserBasicDetail = usuario;
+                NavManager.NavigateTo("/dashboard");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Oops", "Tipo de Usuario Inválido", "OK");
+            }
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", "Invalid username or password", "OK");
+        }
+
+        _spinnerClass = "";
+        this.StateHasChanged();
+    }
+}
