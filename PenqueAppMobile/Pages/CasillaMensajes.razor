@@ -1,0 +1,42 @@
+﻿@page "/misMensajes"
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject IAppService AppService
+
+@{
+    var id = Setting.UserBasicDetail.id;
+    var mensajes = AsyncUtil.RunSync<List<Chat>>(() => getMensajes(id));
+
+}
+
+<section class="container ">
+  <mat-card class="pencas-card">
+    <mat-list>
+      <h2 class="mat-h1 colorP">Casilla de Mensajes</h2>
+        @{
+          foreach (var m in mensajes){
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="text-left">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1946/1946429.png" class="icon-display" alt="">
+                            <p class="">@m.empresa</p>
+                        </div>
+                    </div>
+                }
+        }
+        
+    </mat-list>
+  </mat-card>
+</section>
+
+
+@code{
+
+    private async Task<List<Chat>> getMensajes(int id)
+    {
+        List<Chat> listaC = await Task.Run(() => AppService.miBuzonMensajes(id));
+
+        return listaC;
+    }
+}

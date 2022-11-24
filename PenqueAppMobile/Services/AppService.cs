@@ -182,5 +182,27 @@ namespace PenqueAppMobile.Services
             }
             return returnResponse;
         }
+
+        public async Task<List<Chat>> miBuzonMensajes(int id)
+        {
+            var returnResponse = new List<Chat>();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.verListaMensajes}{id}";
+                //var serializedStr = JsonConvert.SerializeObject();
+                var response = await p.GetAsync(url);
+                //var response = await p.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    var chats = JsonConvert.DeserializeObject<List<Chat>>(contentStr);
+                    foreach (var aux in chats)
+                    {
+                        returnResponse.Add(aux);
+                    }
+                }
+            }
+            return returnResponse;
+        }
     }
 }

@@ -59,6 +59,12 @@
                     <p style="color:whitesmoke;">Juega en las pencas del momento.</p>
                 </div>
             </div>
+            @if (Setting.UserBasicDetail != null){
+                <div class="footer-four-item">
+                    <h3 class="mat-h3">Cuenta</h3>
+                    <a class="hover-underline-animation" @onclick="goMensajes">Casilla de Mensajes</a>
+                </div>
+            }
         </div>
         <div class="footer-copyright" style="color:whitesmoke; font-size:smaller; justify-self:center;"><p align="center">© Copyright 2022, PenqueApp</p></div>
     </footer>
@@ -77,6 +83,10 @@
     private void home()
     {
         NavManager.NavigateTo("/dashboard");
+    }
+    private void goMensajes()
+    {
+        NavManager.NavigateTo("/misMensajes");
     }
     private void signOut()
     {

@@ -7,6 +7,36 @@
 main {
     flex: 1;
 }
+.footer {
+    margin-top: 8rem;
+    background-color: #555555;
+    color: #fff;
+}
+
+    .footer a:hover,
+    .footer a:visited,
+    .footer a:link {
+        color: #fff;
+    }
+
+.footer-four-item {
+    display: flex;
+    flex-direction: column;
+}
+
+    .footer-four-item a {
+        width: fit-content;
+        cursor: pointer;
+        padding: .3rem 0;
+    }
+
+@media (min-width: 640px) {
+    .footer-container {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        padding: 55px;
+    }
+}
 
 .sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
