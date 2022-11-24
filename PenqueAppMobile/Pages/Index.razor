@@ -1,6 +1,8 @@
 ﻿@page "/dashboard"
 @using PenqueAppMobile.Models
 @using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject NavigationManager NavManager;
 @inject IAppService AppService;
 
 @inject NavigationManager NavManager;
@@ -29,44 +31,13 @@ else
     {
         if (aux.Tipo_Penca == 0)
         {
-            var pc = new PencaCompartida();
-            pc.id = aux.Id;
-            pc.nombre = aux.Nombre;
-            pc.tipoDeporte = aux.Tipo_Deporte;
-            pc.entrada = aux.Entrada;
-            pc.pozo = aux.Pozo;
-            pc.tipo_Liga = aux.Tipo_Liga;
-            if (aux.Tipo_Liga == 0)
-            {
-                //pc.idLiga = aux.Liga_Equipo.Id;
-            }
-            else
-            {
-                //pc.idLiga = aux.Liga_Individual.Id;
-            }
-            pc.estado = aux.Estado;
-            listaPC.Add(pc);
+            var pencaC = AsyncUtil.RunSync<PencaCompartida>(() => SeleccionarPencaC(aux.Id));
+            listaPC.Add(pencaC);
         }
         else
         {
-            var pe = new PencaEmpresa();
-            pe.id = aux.Id;
-            pe.nombre = aux.Nombre;
-            pe.tipoDeporte = aux.Tipo_Deporte;
-            pe.entrada = aux.Entrada;
-            pe.premioFinal = aux.Premio_empresa;
-            pe.tipo_Liga = aux.Tipo_Liga;
-            if (aux.Tipo_Liga == 0)
-            {
-                //pe.idLiga = aux.Liga_Equipo.Id;
-            }
-            else
-            {
-                //pe.idLiga = aux.Liga_Individual.Id;
-            }
-            pe.tipoPlan = aux.Tipo_Plan;
-            pe.idEmpresa = aux.EmpresaId;
-            listaPE.Add(pe);
+            var pencaE = AsyncUtil.RunSync<PencaEmpresa>(() => SeleccionarPencaE(aux.Id));
+            listaPE.Add(pencaE);
         }
     }
  
@@ -135,7 +106,7 @@ else
                     </div>
                     <br>
                     <div class="penca-card-content-button">
-                        <button mat-raised-button (click)="openDialog('0ms', '0ms' , pencasCompartida.id)">Detalles</button>
+                        <button mat-raised-button @onclick="() => verPenca(penca.id, 0)">Detalles</button>
                     </div>
                 </div>       
             </mat-card>
@@ -204,7 +175,7 @@ else
                     </div>
                     <br>
                     <div class="penca-card-content-button">
-                        <button mat-raised-button (click)="openDialog('0ms', '0ms' , pencasCompartida.id)">Detalles</button>
+                        <button mat-raised-button @onclick="() => verPenca(penca.id, 1)">Detalles</button>
                     </div>
                 </div>
             </mat-card>
@@ -224,5 +195,85 @@ else
         List<Penca> listaP = await Task.Run(() => AppService.ListaPencasUsuario(Setting.UserBasicDetail.id));
 
         return listaP;
+    }
+
+    public async Task<PencaCompartida> SeleccionarPencaC(int id)
+    {
+        var returnResponse = new PencaCompartida();
+        using (var p = new HttpClient())
+        {
+            var url = $"{Setting.BaseUrl}{APIs.SeleccionarPenca}{id}";
+            //var serializedStr = JsonConvert.SerializeObject();
+            var response = await p.GetAsync(url);
+            //var response = await p.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+            if (response.IsSuccessStatusCode)
+            {
+                string contentStr = await response.Content.ReadAsStringAsync();
+                returnResponse = JsonConvert.DeserializeObject<PencaCompartida>(contentStr);
+            }
+        }
+        return returnResponse;
+    }
+
+    public async Task<PencaEmpresa> SeleccionarPencaE(int id)
+    {
+        var returnResponse = new PencaEmpresa();
+        using (var p = new HttpClient())
+        {
+            var url = $"{Setting.BaseUrl}{APIs.SeleccionarPenca}{id}";
+            var response = await p.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                string contentStr = await response.Content.ReadAsStringAsync();
+                returnResponse = JsonConvert.DeserializeObject<PencaEmpresa>(contentStr);
+            }
+        }
+        return returnResponse;
+    }
+
+    private async void verPenca(int id, int tipoPenca)
+    {
+        if(tipoPenca == 0)
+        {
+            var response = await AppService.SeleccionarPencaC(id);
+            var penca = new PencaCompartida
+            {
+                id = response.id,
+                nombre = response.nombre,
+                tipoDeporte = response.tipoDeporte,
+                entrada = response.entrada,
+                pozo = response.pozo,
+                idLiga = response.idLiga,
+                tipo_Liga = response.tipo_Liga,
+                estado = response.estado
+            };    
+
+            string infoPencaC = JsonConvert.SerializeObject(penca);
+            await SecureStorage.SetAsync(nameof(Setting.PencaCompartidaDetail), infoPencaC);
+            Setting.PencaCompartidaDetail = penca;
+        }
+        else
+        {
+            var response = await AppService.SeleccionarPencaE(id);
+            var penca = new PencaEmpresa
+            {
+                id = response.id,
+                nombre = response.nombre,
+                tipoDeporte = response.tipoDeporte,
+                entrada = response.entrada,
+                premioFinal = response.premioFinal,
+                idLiga = response.idLiga,
+                tipo_Liga = response.tipo_Liga,
+                tipoPlan = response.tipoPlan,
+                idEmpresa = response.idEmpresa
+            };
+
+            string infoPencaE = JsonConvert.SerializeObject(penca);
+            await SecureStorage.SetAsync(nameof(Setting.PencaEmpresaDetail), infoPencaE);
+            Setting.PencaEmpresaDetail = penca;
+        }
+        NavManager.NavigateTo("/infoPenca");
+        }
+        //this.StateHasChanged();
     }
 }

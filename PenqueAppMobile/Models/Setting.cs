@@ -10,7 +10,7 @@ namespace PenqueAppMobile.Models
     {
         public static Usuario UserBasicDetail { get; set; }
         public static PencaCompartida PencaCompartidaDetail { get; set; }
-        public static PencaEmpresa pencaEmpresaDetail { get; set; }
+        public static PencaEmpresa PencaEmpresaDetail { get; set; }
         public const string BaseUrl = "https://penqueapp-backend.azurewebsites.net";
     }
 }

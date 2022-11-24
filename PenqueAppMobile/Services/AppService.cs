@@ -114,14 +114,28 @@ namespace PenqueAppMobile.Services
             var returnResponse = new PencaCompartida();
             using (var p = new HttpClient())
             {
-                var url = $"{Setting.BaseUrl}{APIs.SeleccionarPencaC}{id}";
-                //var serializedStr = JsonConvert.SerializeObject();
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarPenca}{id}";
                 var response = await p.GetAsync(url);
-                //var response = await p.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
                 if (response.IsSuccessStatusCode)
                 {
                     string contentStr = await response.Content.ReadAsStringAsync();
                     returnResponse = JsonConvert.DeserializeObject<PencaCompartida>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<PencaEmpresa> SeleccionarPencaE(int id)
+        {
+            var returnResponse = new PencaEmpresa();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarPenca}{id}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<PencaEmpresa>(contentStr);
                 }
             }
             return returnResponse;

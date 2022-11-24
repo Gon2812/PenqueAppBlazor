@@ -2,6 +2,7 @@
 @using PenqueAppMobile.Models
 @using PenqueAppMobile.Services
 @using Newtonsoft.Json
+@inject NavigationManager NavManager;
 @inject IAppService AppService
 
 @{
@@ -26,7 +27,7 @@
               var pc = AsyncUtil.RunSync<List<Partido>>(() => GetPartidos(liga));
               foreach(var partido in pc)
               {
-                  <div class="row">
+                        <div class="row" @onclick="() => VerPartido()">
                       <div class="col-3"></div>
                       <div class="col">
                           <div class="">
@@ -60,8 +61,14 @@
   </mat-card>
 </section>
 
+<a class="fcc-btn" href="/dashboard">Atras</a>
 
 @code {
+    private void VerPartido()
+    {
+        NavManager.NavigateTo("/verPartido");
+    }
+
     private async Task<int> GetLigas(int idPenca)
     {
         int liga = await Task.Run(() => AppService.verLiga(idPenca));
@@ -84,3 +91,4 @@
         return listaC;
     }
 }
+@*"Dashboard, Partido y Competencia especifico y mensajeria"*@
