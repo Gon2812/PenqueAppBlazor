@@ -14,6 +14,7 @@ namespace PenqueAppMobile.Services
         public Task<List<PencaCompartida>> ListaPencasCompartidas();
         public Task<List<Penca>> ListaPencasUsuario(int idUsu);
         public Task<PencaCompartida> SeleccionarPencaC(int id);
+        public Task<PencaEmpresa> SeleccionarPencaE(int id);
         public Task<int> verLiga(int id);
         public Task<List<Partido>> ListaPartidos(int idLiga);
         public Task<List<Competencia>> ListaCompetencias(int idLiga);

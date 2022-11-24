@@ -111,7 +111,6 @@ button {
     background-color: #00cfb4;
     width: 100px;
     text-align: center;
-    margin-top: -30px;
 }
 
 .penca-card-content-button {
@@ -134,3 +133,7 @@ button {
     .fcc-btn:hover {
         background-color: #223094;
     }
+
+small{
+    color:black;
+}
