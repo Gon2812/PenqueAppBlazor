@@ -218,5 +218,49 @@ namespace PenqueAppMobile.Services
             }
             return returnResponse;
         }
+
+        public async Task<List<Mensaje>> casillaIndividualMensajes(int id)
+        {
+            var returnResponse = new List<Mensaje>();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.verCasillaPersonal}{id}";
+                //var serializedStr = JsonConvert.SerializeObject();
+                var response = await p.GetAsync(url);
+                //var response = await p.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    var mensaje = JsonConvert.DeserializeObject<List<Mensaje>>(contentStr);
+                    foreach (var aux in mensaje)
+                    {
+                        returnResponse.Add(aux);
+                    }
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> EnviarMensaje(DtEnviar DtE)
+        {
+            string errorMessage = string.Empty;
+            bool isSuccess = false;
+            using (var client = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.enviarMensaje}";
+
+                var serializedStr = JsonConvert.SerializeObject(DtE);
+                var response = await client.PutAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    isSuccess = true;
+                }
+                else
+                {
+                    errorMessage = await response.Content.ReadAsStringAsync();
+                }
+            }
+            return (isSuccess, errorMessage);
+        }
     }
 }

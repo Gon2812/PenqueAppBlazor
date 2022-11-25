@@ -1,0 +1,116 @@
+﻿@page "/casillaPersonal"
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject NavigationManager NavManager;
+@inject IAppService AppService
+
+@{
+    var datos = Setting.casillaIndividual;
+    string texto;
+
+}
+<EditForm Model="@dtEnviar" OnValidSubmit="Submit">
+ <DataAnnotationsValidator />
+<section class="container">
+    <mat-card class="pencas-card">
+        <div class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom usuario">
+        @datos.empresa
+        </div>
+        <br>
+        <div class="containerr">
+                <br>
+                        @{
+                            var mensajes = AsyncUtil.RunSync<List<Mensaje>>(() => getCasillas(datos.id));
+
+                            foreach(var m in mensajes){
+                                string[] mensaje = m.mensaje.Split('☻');
+                                if (mensaje.Length == 2){
+                                    m.mensaje = mensaje[1];
+                                    m.rol = 1;
+                                }
+                                else{
+                                    mensaje = m.mensaje.Split('■');
+                                    m.mensaje = mensaje[1];
+                                }
+                            }
+                            foreach(var m in mensajes){
+
+                                if (m.rol == 1)
+                                {
+                                    <div class="derecha">
+                                        <div class="d-flex w-100 align-items-center justify-content-between derecha">
+                                            <strong class="mb-1 usuario">Tu</strong>
+                                        </div>
+                                        <br>
+                                        <div class="col-10 mb-1 smallD">@m.mensaje</div>
+                                    </div>
+                                }
+
+                                else{
+                                    <div class="izquierda">
+                                        <div class="d-flex w-100 align-items-center justify-content-between">
+                                            <strong class="mb-1 usuario">@datos.empresa</strong>
+                                        </div>
+                                        <br>
+                                        <div class="col-10 mb-1 smallI">@m.mensaje</div>
+                                    </div>
+                                }
+                                <br>
+                            }
+                        }
+                        <br>
+     
+                    <div class="mt-2 form-group">
+                        <input class="form-control" @bind-value="@dtEnviar.mensaje" placeholder="Enviar mensaje...."  type="text"/>
+                    <ValidationMessage For="@(()=> dtEnviar.mensaje)" />
+                    </div>
+                    
+                    <button style="background: rgb(3,131,18); 
+        background: linear-gradient(0deg, rgba(3,131,18,1) 0%, rgba(2,118,121,1) 100%);" aria-label="Example icon button with a bookmark icon" type="submit">
+                    <span class="@_spinnerClass" role="status" aria-hidden="true"></span>
+                    Enviar
+                </button>
+
+                    
+        </div>
+    </mat-card>
+</section>
+</EditForm>
+
+@code{
+    private async Task<List<Mensaje>> getCasillas(int id)
+    {
+        List<Mensaje> listaM = await Task.Run(() => AppService.casillaIndividualMensajes(id));
+
+        return listaM;
+    }
+
+    DtEnviar dtEnviar = new();
+    private string _spinnerClass = "";
+    private async void Submit()
+    {
+        _spinnerClass = "spinner-border spinner-border-sm";
+
+        var enviar = new DtEnviar
+            {
+                idUsuario = Setting.UserBasicDetail.id,
+                idEmpresa = Setting.casillaIndividual.idEmpresa,
+                mensaje = dtEnviar.mensaje,
+            };
+
+        var response = await AppService.EnviarMensaje(enviar);
+        if (response.IsSuccess)
+        {
+            await App.Current.MainPage.DisplayAlert("Success", "Mensaje Enviado", "OK");
+           NavManager.NavigateTo("/misMensajes");
+           NavManager.NavigateTo("/casillaPersonal");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", response.ErrorMessage, "OK");
+        }
+        _spinnerClass = "";
+        this.StateHasChanged();
+    }
+}

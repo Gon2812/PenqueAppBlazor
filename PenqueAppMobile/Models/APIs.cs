@@ -17,5 +17,7 @@ namespace PenqueAppMobile.Models
         public const string verPartidos = "/api/LigaEquipo/getPartidos/";
         public const string verCompetencias = "/api/LigaIndividual/mostrarCompetencias/";
         public const string verListaMensajes = "/api/Usuario/mostrarChats?idUsuario=";
+        public const string verCasillaPersonal = "/api/Usuario/mostrarMensajes?idChat=";
+        public const string enviarMensaje = "/api/Usuario/enviarMensaje";
     }
 }
