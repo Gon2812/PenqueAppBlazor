@@ -81,7 +81,9 @@ td {
     grid-column-gap: 16px;
     grid-column: 150px calc(90vw - 150px);
     border-radius: 10px;
-    width: 600px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
 }
 
 .dashboard {
