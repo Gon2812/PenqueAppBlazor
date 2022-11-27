@@ -10,10 +10,11 @@
     var listaP = AsyncUtil.RunSync<List<PencaCompartida>>(() => GetListAsync());
 }
 
-    <div class="container">
+    <div class="row">
         @foreach (var penca in listaP)
         {
-            <mat-card class="penca-card">
+        <div class="column">
+            <div class="card">
                 <div class="penca-card-content">
                     <div class="penca-card-image">
                         @if (penca.tipoDeporte.ToString().Equals("Futbol"))
@@ -43,43 +44,44 @@
                     @if (penca.tipoDeporte.ToString().Equals("Futbol"))
                     {
                         <div class="penca-card-content-address mat-hint">
-                        <p style="color:white">Deporte: Futbol</p>
+                            <p style="color:white">Deporte: Futbol</p>
                         </div>
                     }
                     else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
                     {
                         <div class="penca-card-content-address mat-hint">
-                        <p style="color:white">Deporte: Basketball</p>
+                            <p style="color:white">Deporte: Basketball</p>
                         </div>
                     }
                     else if (penca.tipoDeporte.ToString().Equals("Tenis"))
                     {
                         <div class="penca-card-content-address mat-hint">
-                        <p style="color:white">Deporte: Tenis</p>
+                            <p style="color:white">Deporte: Tenis</p>
                         </div>
                     }
                     else if (penca.tipoDeporte.ToString().Equals("Voley"))
                     {
                         <div class="penca-card-content-address mat-hint">
-                        <p style="color:white">Deporte: Voley</p>
+                            <p style="color:white">Deporte: Voley</p>
                         </div>
                     }
                     else
                     {
                         <div class="penca-card-content-address mat-hint">
-                        <p style="color:white">Deporte: Competencia</p>
+                            <p style="color:white">Deporte: Competencia</p>
                         </div>
                     }
                     <div class="penca-card-content-price">
-                    <p style="color:white">Precio: <span>$@penca.entrada</span></p>
+                        <p style="color:white">Precio: <span>$@penca.entrada</span></p>
                     </div>
                     @*"Dashboard, Partido y Competencia especifico y mensajeria"*@
                     <br>
                     <div class="penca-card-content-button">
-                        <button class="btn btn-success" @onclick="() => verPenca(penca.id)">Detalles</button>                    
+                        <button class="btn btn-success" @onclick="() => verPenca(penca.id)">Detalles</button>
                     </div>
                 </div>
-            </mat-card>
+            </div>
+        </div>
         }
     </div>
 
