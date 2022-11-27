@@ -262,5 +262,28 @@ namespace PenqueAppMobile.Services
             }
             return (isSuccess, errorMessage);
         }
+
+        public async Task<List<DtPuntaje>> getPosiciones(int id)
+        {
+            var returnResponse = new List<DtPuntaje>();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.verDashboard}{id}";
+                //var serializedStr = JsonConvert.SerializeObject();
+                var response = await p.GetAsync(url);
+                //var response = await p.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    var puntos = JsonConvert.DeserializeObject<List<DtPuntaje>>(contentStr);
+                    foreach (var aux in puntos)
+                    {
+                        returnResponse.Add(aux);
+                    }
+                }
+            }
+            return returnResponse;
+        }
+
     }
 }

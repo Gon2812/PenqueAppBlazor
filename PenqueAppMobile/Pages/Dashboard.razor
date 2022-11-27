@@ -1,0 +1,45 @@
+﻿@page "/verDashboard"
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject NavigationManager NavManager;
+@inject IAppService AppService
+
+@{
+    var id = Setting.PencaCompartidaDetail.id;
+    var puntos = AsyncUtil.RunSync<List<DtPuntaje>>(() => getPuntajes(id));
+
+}
+<section class="container center-vh">
+<h2 class="mat-h1 colorP">Dashboard</h2>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Posicion</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Puntos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach(var p in puntos){
+                    <tr>
+                        <td data-label="Posicion">@p.posicion</td>
+                        <td data-label="Nombre">@p.usuario</td>
+                        <td data-label="Puntos">@p.puntaje</td>
+                    </tr>
+                }
+            }
+            
+        </tbody>
+    </table>
+</section>
+
+@code{
+    private async Task<List<DtPuntaje>> getPuntajes(int id)
+    {
+        List<DtPuntaje> listaP = await Task.Run(() => AppService.getPosiciones(id));
+
+        return listaP;
+    }
+}

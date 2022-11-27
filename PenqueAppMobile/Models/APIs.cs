@@ -19,5 +19,7 @@ namespace PenqueAppMobile.Models
         public const string verListaMensajes = "/api/Usuario/mostrarChats?idUsuario=";
         public const string verCasillaPersonal = "/api/Usuario/mostrarMensajes?idChat=";
         public const string enviarMensaje = "/api/Usuario/enviarMensaje";
+        public const string verDashboard = "/api/Penca/ListarPosiciones/";
+        
     }
 }
