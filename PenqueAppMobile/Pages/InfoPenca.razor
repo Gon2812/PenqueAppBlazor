@@ -44,7 +44,7 @@
               var pc = AsyncUtil.RunSync<List<Competencia>>(() => GetCompetencias(liga));
               foreach(var competencia in pc)
               {
-                  <div class="row">
+                <div class="row" @onclick="() => verCompetencia(competencia.id, competencia.nombre, competencia.fecha_competencia)">
                       <div class="col-3"></div>
                       <div class="col">
                           <div class="">
@@ -93,6 +93,22 @@
         List<Competencia> listaC = await Task.Run(() => AppService.ListaCompetencias(idLiga));
 
         return listaC;
+    }
+
+    private async void verCompetencia(int id, string nombre, DateTime fecha)
+    {
+        var competencia = new Competencia
+        {
+            id = id,
+            nombre = nombre,
+            fecha_competencia = fecha
+            
+        };
+
+        string infoCompetencia = JsonConvert.SerializeObject(competencia);
+        await SecureStorage.SetAsync(nameof(Setting.competencia), infoCompetencia);
+        Setting.competencia = competencia;
+        NavManager.NavigateTo("/verCompetencia");
     }
 }
 @*"Dashboard, Partido y Competencia especifico y mensajeria"*@

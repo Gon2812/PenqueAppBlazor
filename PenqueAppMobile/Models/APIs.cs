@@ -20,6 +20,12 @@ namespace PenqueAppMobile.Models
         public const string verCasillaPersonal = "/api/Usuario/mostrarMensajes?idChat=";
         public const string enviarMensaje = "/api/Usuario/enviarMensaje";
         public const string verDashboard = "/api/Penca/ListarPosiciones/";
-        
+        public const string getParticipantes = "/api/Competencia/mostrarParticipantes/";
+        public const string infoCompetencia = "/api/Penca/ListarPosiciones/";
+        public const string apostarParticipante = "/api/Usuario/apostarUnaCompetencia";
+        public const string verInfoApuesta = "/api/Usuario/verPrediccionCompetencia?id=";
+        public const string verInfoApuesta2 = "&idCompetencia=";
+        public const string verResultadosCompetencia = "/api/Competencia/mostrarResultados/";
+
     }
 }

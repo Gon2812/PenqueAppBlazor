@@ -13,6 +13,8 @@ namespace PenqueAppMobile.Models
         public static PencaEmpresa PencaEmpresaDetail { get; set; }
 
         public static Mensaje casillaIndividual { get; set; }
+
+        public static Competencia competencia { get; set; }
         public const string BaseUrl = "https://localhost:7210";
     }
 }

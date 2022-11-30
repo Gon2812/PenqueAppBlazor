@@ -285,5 +285,83 @@ namespace PenqueAppMobile.Services
             return returnResponse;
         }
 
+        public async Task<List<Participante>> ListaParticipantes(int id)
+        {
+            var returnResponse = new List<Participante>();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.getParticipantes}{id}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    var participantes = JsonConvert.DeserializeObject<List<Participante>>(contentStr);
+                    foreach (var aux in participantes)
+                    {
+                        returnResponse.Add(aux);
+                    }
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> ApostarCompetencia(Apuesta apuesta)
+        {
+            string errorMessage = string.Empty;
+            bool isSuccess = false;
+            using (var client = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.apostarParticipante}";
+
+                var serializedStr = JsonConvert.SerializeObject(apuesta);
+                var response = await client.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    isSuccess = true;
+                }
+                else
+                {
+                    errorMessage = await response.Content.ReadAsStringAsync();
+                }
+            }
+            return (isSuccess, errorMessage);
+        }
+
+        public async Task<string> verMiApuesta(int idCompetencia, int idUser)
+        {
+            var returnResponse = "";
+            using (var l = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.verInfoApuesta}{idUser}{APIs.verInfoApuesta2}{idCompetencia}";
+                var response = await l.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = contentStr;
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<List<DtResultadoC>> resultadoCompetencia(int id)
+        {
+            var returnResponse = new List<DtResultadoC>();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.verResultadosCompetencia}{id}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    var participantes = JsonConvert.DeserializeObject<List<DtResultadoC>>(contentStr);
+                    foreach (var aux in participantes)
+                    {
+                        returnResponse.Add(aux);
+                    }
+                }
+            }
+            return returnResponse;
+        }
+
     }
 }

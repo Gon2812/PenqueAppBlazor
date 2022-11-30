@@ -21,6 +21,11 @@ namespace PenqueAppMobile.Services
         public Task<List<Chat>> miBuzonMensajes(int id);
         public Task<List<Mensaje>> casillaIndividualMensajes(int id);
         public Task<List<DtPuntaje>> getPosiciones(int id);
+
+        public Task<List<Participante>> ListaParticipantes(int id);
         Task<(bool IsSuccess, string ErrorMessage)> EnviarMensaje(DtEnviar DtE);
+        public Task<string> verMiApuesta(int idCompetencia, int idUser);
+        Task<(bool IsSuccess, string ErrorMessage)> ApostarCompetencia(Apuesta apuesta);
+        public Task<List<DtResultadoC>> resultadoCompetencia(int id);
     }
 }
