@@ -8,23 +8,21 @@ body[b-nofvntq32w] {
 .container[b-nofvntq32w] {
     display: flex;
     flex-direction: column;
-    background-color: #040f13;
+    background-color: #424242;
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
 .container[b-nofvntq32w] {
     width: 100%;
     max-width: 700px;
     margin: 0 auto;
 }
 
-.container a[b-nofvntq32w] {
-    text-decoration: none;
-}
+    .container a[b-nofvntq32w] {
+        text-decoration: none;
+    }
 
-.container[b-nofvntq32w] {
-    margin-bottom: 315px;
-}
 .center-vh[b-nofvntq32w] {
     display: flex;
     justify-content: center;
@@ -81,7 +79,9 @@ td[b-nofvntq32w] {
     grid-column-gap: 16px;
     grid-column: 150px calc(90vw - 150px);
     border-radius: 10px;
-    width: 600px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
 }
 
 .dashboard[b-nofvntq32w] {
