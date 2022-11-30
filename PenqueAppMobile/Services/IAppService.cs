@@ -27,5 +27,11 @@ namespace PenqueAppMobile.Services
         public Task<string> verMiApuesta(int idCompetencia, int idUser);
         Task<(bool IsSuccess, string ErrorMessage)> ApostarCompetencia(Apuesta apuesta);
         public Task<List<DtResultadoC>> resultadoCompetencia(int id);
+        public Task<Partido> SeleccionarPartido(int idPartido);
+        public Task<Competencia> SeleccionarCompetencia(int idComptencia);
+        public Task<Liga_Equipo> SeleccionarLigaE(int id);
+        public Task<Liga_Individual> SeleccionarLigaI(int id);
+        public Task<Prediccion> PredecirPartido(Prediccion prediccion);
+        public Task<int> PrediccionPartidoU(int idPartido, int idUsuario);
     }
 }

@@ -27,7 +27,7 @@
               var pc = AsyncUtil.RunSync<List<Partido>>(() => GetPartidos(liga));
               foreach(var partido in pc)
               {
-                        <div class="row" @onclick="() => VerPartido()">
+                <div class="row" @onclick="() => VerPartido(partido.id)">
                       <div class="col-3"></div>
                       <div class="col">
                           <div class="">
@@ -63,8 +63,24 @@
 <a class="fcc-btn" href="/dashboard">Atras</a>
 
 @code {
-    private void VerPartido()
+    private async void VerPartido(int idPartido)
     {
+        var response = await AppService.SeleccionarPartido(idPartido);
+        var partido = new Partido
+            {
+                id = response.id,
+                fecha = response.fecha,
+                Idlocal = response.Idlocal,
+                Idvisitante = response.Idvisitante,
+                local = response.local,
+                visitante = response.visitante,
+                resultado = response.resultado,
+                deporte = response.deporte
+            };
+
+        string matchBasicInfoStr = JsonConvert.SerializeObject(partido);
+        await SecureStorage.SetAsync(nameof(Setting.PartidoDetail), matchBasicInfoStr);
+        Setting.PartidoDetail = partido;
         NavManager.NavigateTo("/verPartido");
     }
 
@@ -109,6 +125,38 @@
         await SecureStorage.SetAsync(nameof(Setting.competencia), infoCompetencia);
         Setting.competencia = competencia;
         NavManager.NavigateTo("/verCompetencia");
+    }
+
+    private async void SeleccionarLigaEquipo(int idLiga)
+    {
+        var response = await AppService.SeleccionarLigaE(idLiga);
+        var ligaE = new Liga_Equipo
+            {
+                Id = response.Id,
+                NombreLiga = response.NombreLiga,
+                Tope = response.Tope,
+                Tipo_Deporte = response.Tipo_Deporte,
+            };
+
+        string leagueBasicInfoStr = JsonConvert.SerializeObject(ligaE);
+        await SecureStorage.SetAsync(nameof(Setting.LigaEquipoDetail), leagueBasicInfoStr);
+        Setting.LigaEquipoDetail = ligaE;
+    }
+
+    private async void SeleccionarLigaIndividual(int idLiga)
+    {
+        var response = await AppService.SeleccionarLigaI(idLiga);
+        var ligaI = new Liga_Individual
+            {
+                Id = response.Id,
+                Nombre = response.Nombre,
+                TopeCompetencias = response.TopeCompetencias,
+                TipoArea = response.TipoArea
+            };
+
+        string leagueBasicInfoStr = JsonConvert.SerializeObject(ligaI);
+        await SecureStorage.SetAsync(nameof(Setting.LigaIndividualDetail), leagueBasicInfoStr);
+        Setting.LigaIndividualDetail = ligaI;
     }
 }
 @*"Dashboard, Partido y Competencia especifico y mensajeria"*@

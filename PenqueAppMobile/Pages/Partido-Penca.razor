@@ -1,9 +1,115 @@
 ﻿@page "/verPartido"
+@using Microsoft.VisualBasic;
+@using PenqueAppMobile.Models
+@using PenqueAppMobile.Services
+@using Newtonsoft.Json
+@inject NavigationManager NavManager;
+@inject IAppService AppService
 
-<h3>Partido_Penca</h3>
+@{
+    var deporte = Setting.PartidoDetail;
+}
+
+<EditForm Model="@prediccion" OnValidSubmit="Submit">
+    <section class="container center-vh">
+        <h1 class="mat-h1 text-center colorP">Deporte: @deporte.deporte</h1>
+        <h2 class="mat-h1 text-center colorP">Fecha: @deporte.fecha.ToString()</h2>
+        <mat-list _ngcontent-soy-c250>
+            <h3 class="mat-h1 text-center colorP">Liga: @Setting.LigaEquipoDetail.NombreLiga</h3>
+            <div _ngcontent-soy-c250 class="row">
+                <table>
+                    <thead class="tabla">
+                        <tr>
+                            <td style="color: white">Local:</td>
+                            <td></td>
+                            <td style="color: white">Visitante:</td>
+                        </tr>
+                    </thead>
+                    <tbody class="tabla">
+                        <tr>
+                            <td style="color: white">@Setting.PartidoDetail.local</td>
+                            <td style="color: white">VS.</td>
+                            <td style="color: white">@Setting.PartidoDetail.visitante</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                @if (@Setting.PartidoDetail.resultado.ToString().Equals("Indefinido"))
+                {
+                    var pc = AsyncUtil.RunSync<int>(() => prediccionUsuario());
+                    @if (pc == 3)
+                    {
+                        <h4 class="mat-h1 text-center colorP">Prediccion:</h4>
+                        <select class="form-select" aria-label="Default select example" @bind="prediccion.tipo">
+                            <option value="Indefinido" selected>Indefinido</option>
+                            <option value="Local">Gana local</option>
+                            <option value="Visitante">Gana visitante</option>
+                            <option value="Empate">Empate</option>
+                        </select>
+                        <button class="btn btn-primary" type="submit">
+                            <span class="@_spinnerClass" role="status" aria-hidden="true"></span>
+                            Predecir
+                        </button>
+                    }
+                    else
+                    {
+                        <h4 class="mat-h1 text-center colorP">
+                            Prediccion:
+                            @{
+                                if (pc == 0)
+                                {
+                                    <h5>Local</h5>
+                                }
+                                else if (pc == 1)
+                                {
+                                    <h5>Visitante</h5>
+                                }
+                                else
+                                {
+                                    <h5>Empate</h5>
+                                }
+                            }
+                        </h4>
+                    }
+                }
+                else
+                {
+                    <h4 class="mat-h1 text-center colorP">Prediccion: @Setting.PartidoDetail.resultado</h4>
+                }
+                <h5 class="mat-h1 text-center colorP">Resultado: @Setting.PartidoDetail.resultado</h5>
+            </div>
+        </mat-list>
+    </section>
+</EditForm>
 
 <a class="fcc-btn" href="/infoPenca">Atras</a>
 
-@code {
+@code
+{
+    private string _spinnerClass = "";
+    Prediccion prediccion = new();
+    private async void Submit()
+    {
+        _spinnerClass = "spinner-border spinner-border-sm";
+        prediccion.idUsuario = Setting.UserBasicDetail.id;
+        prediccion.idPartido = Setting.PartidoDetail.id;
+        if (Setting.PencaEmpresaDetail == null)
+        {
+            prediccion.idPenca = Setting.PencaCompartidaDetail.id;
+        }
+        else
+        {
+            prediccion.idPenca = Setting.PencaEmpresaDetail.id;
+        }
+        var response = await AppService.PredecirPartido(prediccion);
+        _spinnerClass = "";
+        this.StateHasChanged();
+    }
 
+    private async Task<int> prediccionUsuario()
+    {
+        var response = await AppService.PrediccionPartidoU(Setting.PartidoDetail.id, Setting.UserBasicDetail.id);
+        return response;
+    }
 }

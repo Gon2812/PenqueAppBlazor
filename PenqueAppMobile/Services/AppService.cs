@@ -363,5 +363,104 @@ namespace PenqueAppMobile.Services
             return returnResponse;
         }
 
+        public async Task<Partido> SeleccionarPartido(int idPartido)
+        {
+            var returnResponse = new Partido();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarPartido}{idPartido}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<Partido>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<Competencia> SeleccionarCompetencia(int idComptencia)
+        {
+            var returnResponse = new Competencia();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarCompetencia}{idComptencia}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<Competencia>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<Liga_Equipo> SeleccionarLigaE(int id)
+        {
+            var returnResponse = new Liga_Equipo();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarLigaEquipo}{id}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<Liga_Equipo>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<Liga_Individual> SeleccionarLigaI(int id)
+        {
+            var returnResponse = new Liga_Individual();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarLigaIndividual}{id}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<Liga_Individual>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<Prediccion> PredecirPartido(Prediccion prediccion)
+        {
+            var returnResponse = new Prediccion();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.PredecirPartido}";
+
+                var serializedStr = JsonConvert.SerializeObject(prediccion);
+
+                var response = await p.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<Prediccion>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<int> PrediccionPartidoU(int idPartido, int idUsuario)
+        {
+            var returnResponse = new int();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.PrediccionPartUsu}{idUsuario}{APIs.PrediccionPartUsu2}{idPartido}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<int>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
     }
 }
