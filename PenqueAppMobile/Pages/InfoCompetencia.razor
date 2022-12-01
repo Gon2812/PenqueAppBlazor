@@ -10,24 +10,27 @@
     var participantes = AsyncUtil.RunSync<List<Participante>>(() => getParticipantes(id));
     var competencia = Setting.competencia;
     var resultado = AsyncUtil.RunSync<List<DtResultadoC>>(() => getResultado(id));
-    
+
     var miApuesta = "";
-    if (Setting.UserBasicDetail != null){
+    if (Setting.UserBasicDetail != null)
+    {
         var idUser = Setting.UserBasicDetail.id;
-        miApuesta = AsyncUtil.RunSync<string>(() => getMiApuesta(idUser, id));
+        var idPenca = Setting.PencaCompartidaDetail.id;
+        miApuesta = AsyncUtil.RunSync<string>(() => getMiApuesta(idUser, id, idPenca));
     }
-    
+
 
 }
 <section class="container center-vh">
-<h2 class="mat-h1 colorP">Competencia: @competencia.nombre</h2>
+    <h2 class="mat-h1 colorP">Competencia: @competencia.nombre</h2>
     <h4 class="colorE">Fecha: @competencia.fecha_competencia</h4>
     <table>
         <thead>
             <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Disciplina</th>
-                @if (Setting.UserBasicDetail != null){
+                @if (Setting.UserBasicDetail != null)
+                {
                     <th scope="col">Apostar</th>
                 }
             </tr>
@@ -39,55 +42,62 @@
                     <tr>
                         <td data-label="Nombre">@p.nombre</td>
                         <td data-label="Disciplina">@p.Area</td>
-                        @if (Setting.UserBasicDetail != null){
-                            if(miApuesta == ""){
+                        @if (Setting.UserBasicDetail != null)
+                        {
+                            if (miApuesta == "")
+                            {
                                 <td data-label="Apostar"> <button mat-stroked-button class="enabled" style="margin-left:5px" @onclick="() => Apostar(p.id)"><span class="@_spinnerClass" role="status" aria-hidden="true"></span>Apostar</button></td>
 
                             }
-                            else{
-                                if(miApuesta == p.nombre){
-                                    <td data-label="Apuesta" ><span class="apuesta">Tu Apuesta</span></td>
+                            else
+                            {
+                                if (miApuesta == p.nombre)
+                                {
+                                    <td data-label="Apuesta"><span class="apuesta">Tu Apuesta</span></td>
                                 }
-                                else{
+                                else
+                                {
                                     <td data-label=""></td>
                                 }
                             }
 
                         }
-                        
-                        
+
+
                     </tr>
                 }
             }
-            
+
         </tbody>
     </table>
 </section>
 
 
-    @if (resultado.Count() != 0) {
-        <section class="container center-vh">
-            <h2 class="mat-h1 colorP">Resultados:</h2>
-            <table>
-                <thead>
+@if (resultado.Count() != 0)
+{
+    <section class="container center-vh">
+        <h2 class="mat-h1 colorP">Resultados:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Posicion</th>
+                    <th scope="col">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var r in resultado)
+                {
                     <tr>
-                        <th scope="col">Posicion</th>
-                        <th scope="col">Nombre</th>
+                        <td data-label="Posición">@r.id</td>
+                        <td data-label="Nombre">@r.nombre</td>
                     </tr>
-                </thead>
-                <tbody>
-     
-        @foreach(var r in resultado){
-            <tr>
-                    <td data-label="Posición">@r.id</td>
-                    <td data-label="Nombre">@r.nombre</td>
-            </tr>
-        }
+                }
 
             </tbody>
-            </table>
-        </section>
-    }
+        </table>
+    </section>
+}
 
 @code {
     private async Task<List<Participante>> getParticipantes(int id)
@@ -104,9 +114,9 @@
         return listaR;
     }
 
-    private async Task<string> getMiApuesta(int idU, int idC)
+    private async Task<string> getMiApuesta(int idU, int idC, int idP)
     {
-        string estado = await Task.Run(() => AppService.verMiApuesta(idC, idU));
+        string estado = await Task.Run(() => AppService.verMiApuesta(idC, idU, idP));
 
         return estado;
     }
@@ -128,7 +138,7 @@
         if (response.IsSuccess)
         {
             await App.Current.MainPage.DisplayAlert("Success", "Apuesta realizada con exito", "OK");
-           NavManager.NavigateTo("/verCompetencia");
+            NavManager.NavigateTo("/verCompetencia");
         }
         else
         {
@@ -138,3 +148,4 @@
         this.StateHasChanged();
     }
 }
+

@@ -25,6 +25,7 @@ namespace PenqueAppMobile.Models
         public const string apostarParticipante = "/api/Usuario/apostarUnaCompetencia";
         public const string verInfoApuesta = "/api/Usuario/verPrediccionCompetencia?id=";
         public const string verInfoApuesta2 = "&idCompetencia=";
+        public const string verInfoApuesta3 = "&idPenca=";
         public const string verResultadosCompetencia = "/api/Competencia/mostrarResultados/";
         public const string SeleccionarPartido = "/api/Partido/";
         public const string SeleccionarCompetencia = "/api/Competencia/";

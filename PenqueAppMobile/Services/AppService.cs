@@ -327,12 +327,12 @@ namespace PenqueAppMobile.Services
             return (isSuccess, errorMessage);
         }
 
-        public async Task<string> verMiApuesta(int idCompetencia, int idUser)
+        public async Task<string> verMiApuesta(int idCompetencia, int idUser, int idPenca)
         {
             var returnResponse = "";
             using (var l = new HttpClient())
             {
-                var url = $"{Setting.BaseUrl}{APIs.verInfoApuesta}{idUser}{APIs.verInfoApuesta2}{idCompetencia}";
+                var url = $"{Setting.BaseUrl}{APIs.verInfoApuesta}{idUser}{APIs.verInfoApuesta2}{idCompetencia}{APIs.verInfoApuesta3}{idPenca}";
                 var response = await l.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
