@@ -6,23 +6,25 @@
 @inject IAppService AppService
 
 @{
-    var penca = Setting.PencaCompartidaDetail;
+    var penca = Setting.PencaDetail;
     var liga = AsyncUtil.RunSync<int>(() => GetLigas(penca.id));
+    SeleccionarLigaEquipo(liga);
+
 }
 
 <section class="container center-vh">
     
-      @if(penca.tipo_Liga == 0){
+      @if(penca.tipo_Liga.ToString().Equals("Equipo")){
           <h2 class="mat-h1 text-center colorP">Partidos</h2>
       }
       else{
           <h2 class="mat-h1 text-center colorP">Competencias</h2>
       }
-            <div class="dashboard">
-                <button mat-stroked-button class="enabled" style="margin-left:5px" @onclick="() => verDashboard()">Ver Dashboard</button>
+      <div class="dashboard">
+          <button mat-stroked-button class="enabled" style="margin-left:5px" @onclick="() => verDashboard()">Ver Dashboard</button>
       </div>
       @{
-          if(penca.tipo_Liga == 0)
+          if (penca.tipo_Liga.ToString().Equals("Equipo"))
           {
               var pc = AsyncUtil.RunSync<List<Partido>>(() => GetPartidos(liga));
               foreach(var partido in pc)
@@ -60,7 +62,8 @@
    
 </section>
 
-<a class="fcc-btn" href="/dashboard">Atras</a>
+<button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
+
 
 @code {
     private async void VerPartido(int idPartido)
@@ -118,7 +121,7 @@
             id = id,
             nombre = nombre,
             fecha_competencia = fecha
-            
+
         };
 
         string infoCompetencia = JsonConvert.SerializeObject(competencia);
@@ -157,6 +160,18 @@
         string leagueBasicInfoStr = JsonConvert.SerializeObject(ligaI);
         await SecureStorage.SetAsync(nameof(Setting.LigaIndividualDetail), leagueBasicInfoStr);
         Setting.LigaIndividualDetail = ligaI;
+    }
+
+    private void atras()
+    {
+        if (Setting.UserBasicDetail != null)
+        {
+            NavManager.NavigateTo("/dashboard");
+        }
+        else
+        {
+            NavManager.NavigateTo("/");
+        }
     }
 }
 @*"Dashboard, Partido y Competencia especifico y mensajeria"*@

@@ -15,7 +15,7 @@
     if (Setting.UserBasicDetail != null)
     {
         var idUser = Setting.UserBasicDetail.id;
-        var idPenca = Setting.PencaCompartidaDetail.id;
+        var idPenca = Setting.PencaDetail.id;
         miApuesta = AsyncUtil.RunSync<string>(() => getMiApuesta(idUser, id, idPenca));
     }
 
@@ -99,6 +99,9 @@
     </section>
 }
 
+<button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
+
+
 @code {
     private async Task<List<Participante>> getParticipantes(int id)
     {
@@ -130,7 +133,7 @@
             {
                 idCompetencia = Setting.competencia.id,
                 idUsuario = Setting.UserBasicDetail.id,
-                idPenca = Setting.PencaCompartidaDetail.id,
+                idPenca = Setting.PencaDetail.id,
                 idParticipante = idParticipante,
             };
 
@@ -146,6 +149,11 @@
         }
         _spinnerClass = "";
         this.StateHasChanged();
+    }
+
+    private void atras()
+    {
+        NavManager.NavigateTo("/infoPenca");
     }
 }
 

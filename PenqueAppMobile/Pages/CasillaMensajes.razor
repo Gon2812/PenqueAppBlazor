@@ -31,6 +31,8 @@
   </mat-card>
 </section>
 
+<button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
+
 
 @code{
 
@@ -55,5 +57,11 @@
         await SecureStorage.SetAsync(nameof(Setting.casillaIndividual), infoCasilla);
         Setting.casillaIndividual = mensajeria;
         NavManager.NavigateTo("/casillaPersonal");
+    }
+
+    private void atras()
+    {
+
+        NavManager.NavigateTo("/dashboard");
     }
 }

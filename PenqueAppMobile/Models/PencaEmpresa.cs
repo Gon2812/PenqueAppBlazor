@@ -15,7 +15,7 @@ namespace PenqueAppMobile.Models
         public float? premioFinal { get; set; }
         public int idLiga { get; set; }
         public Tipo_Liga tipo_Liga { get; set; }
-        public Tipo_Plan? tipoPlan { get; set; }
+        public Tipo_Plan? tipo_Plan { get; set; }
         public int idEmpresa { get; set; }
     }
 }

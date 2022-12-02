@@ -41,7 +41,7 @@
                     @if (pc == 3)
                     {
                         <h4 class="mat-h1 text-center colorP">Prediccion:</h4>
-                        <select class="form-select" aria-label="Default select example" @bind="prediccion.tipo">
+                        <select class="form-select" aria-label="Indefinido" @bind="prediccion.tipo">
                             <option value="Indefinido" selected>Indefinido</option>
                             <option value="Local">Gana local</option>
                             <option value="Visitante">Gana visitante</option>
@@ -83,7 +83,8 @@
     </section>
 </EditForm>
 
-<a class="fcc-btn" href="/infoPenca">Atras</a>
+<button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
+
 
 @code
 {
@@ -94,22 +95,23 @@
         _spinnerClass = "spinner-border spinner-border-sm";
         prediccion.idUsuario = Setting.UserBasicDetail.id;
         prediccion.idPartido = Setting.PartidoDetail.id;
-        if (Setting.PencaEmpresaDetail == null)
+        prediccion.idPenca = Setting.PencaDetail.id;
+        if(!prediccion.tipo.ToString().Equals("Indefinido"))
         {
-            prediccion.idPenca = Setting.PencaCompartidaDetail.id;
+            var response = await AppService.PredecirPartido(prediccion);
         }
-        else
-        {
-            prediccion.idPenca = Setting.PencaEmpresaDetail.id;
-        }
-        var response = await AppService.PredecirPartido(prediccion);
         _spinnerClass = "";
         this.StateHasChanged();
     }
 
     private async Task<int> prediccionUsuario()
     {
-        var response = await AppService.PrediccionPartidoU(Setting.PartidoDetail.id, Setting.UserBasicDetail.id);
+        var response = await AppService.PrediccionPartidoU(Setting.PartidoDetail.id, Setting.UserBasicDetail.id, Setting.PencaDetail.id);
         return response;
+    }
+
+    private void atras()
+    {
+        NavManager.NavigateTo("/infoPenca");
     }
 }

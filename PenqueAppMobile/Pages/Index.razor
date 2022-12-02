@@ -8,6 +8,7 @@
 @inject NavigationManager NavManager;
 
 @{
+    Setting.PencaDetail = null;
     var listaP = AsyncUtil.RunSync<List<Penca>>(() => GetListAsync());
 }
 
@@ -26,7 +27,7 @@ else
 {
     List<PencaCompartida> listaPC = new List<PencaCompartida>();
     List<PencaEmpresa> listaPE = new List<PencaEmpresa>();
-    foreach (var aux in listaP)
+    /*foreach (var aux in listaP)
     {
         if (aux.Tipo_Penca == 0)
         {
@@ -38,151 +39,149 @@ else
             var pencaE = AsyncUtil.RunSync<PencaEmpresa>(() => SeleccionarPencaE(aux.Id));
             listaPE.Add(pencaE);
         }
-    }
+    }*/
        
  
     <div class="row">
-        @foreach (var penca in listaPC)
+        @foreach (var penca in listaP)
         {
-            <div class="column">
-                <div class="card">
-                    <div class="penca-card-content">
-                        <div class="penca-card-image">
-                            @if (penca.tipoDeporte.ToString().Equals("Futbol"))
+            if (penca.tipoPenca.ToString().Equals("Compartida"))
+            {
+                <div class="column">
+                    <div style="background-color:rgb(92, 167, 197);" class="card">
+                        <div class="penca-card-content">
+                            <div class="penca-card-image">
+                                @if (penca.tipo_Deporte.ToString().Equals("Futbol"))
+                                {
+                                    <img src="https://img.freepik.com/vector-premium/logotipo-futbol-boot-patea-pelota-ilustracion-vectorial_183342-393.jpg">
+                                }
+                                else if (penca.tipo_Deporte.ToString().Equals("Basquetball"))
+                                {
+                                    <img src="https://img.freepik.com/premium-vector/basketball-logo_260747-419.jpg">
+                                }
+                                else if (penca.tipo_Deporte.ToString().Equals("Tenis"))
+                                {
+                                    <img src="https://img.freepik.com/premium-vector/tennis-logo-icon-design-sports-badge-template-vector-illustration_630259-74.jpg">
+                                }
+                                else if (penca.tipo_Deporte.ToString().Equals("Voley"))
+                                {
+                                    <img src="https://i.pinimg.com/736x/9c/c2/05/9cc20507041e1dbfc1f772ac42b43390.jpg">
+                                }
+                                else
+                                {
+                                    <img src="https://i.pinimg.com/originals/6f/35/0d/6f350d177d15776f7874b5c4d0e68a5b.jpg">
+                                }
+                            </div>
+                            <div class="penca-card-content-title">
+                                <p style="color:white">@penca.nombre</p>
+                            </div>
+                            @if (penca.tipo_Deporte.ToString().Equals("Futbol"))
                             {
-                                <img src="https://img.freepik.com/vector-premium/logotipo-futbol-boot-patea-pelota-ilustracion-vectorial_183342-393.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Futbol</p>
+                                </div>
                             }
-                            else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
+                            else if (penca.tipo_Deporte.ToString().Equals("Basquetball"))
                             {
-                                <img src="https://img.freepik.com/premium-vector/basketball-logo_260747-419.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Basketball</p>
+                                </div>
                             }
-                            else if (penca.tipoDeporte.ToString().Equals("Tenis"))
+                            else if (penca.tipo_Deporte.ToString().Equals("Tenis"))
                             {
-                                <img src="https://img.freepik.com/premium-vector/tennis-logo-icon-design-sports-badge-template-vector-illustration_630259-74.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Tenis</p>
+                                </div>
                             }
-                            else if (penca.tipoDeporte.ToString().Equals("Voley"))
+                            else if (penca.tipo_Deporte.ToString().Equals("Voley"))
                             {
-                                <img src="https://i.pinimg.com/736x/9c/c2/05/9cc20507041e1dbfc1f772ac42b43390.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Voley</p>
+                                </div>
                             }
                             else
                             {
-                                <img src="https://i.pinimg.com/originals/6f/35/0d/6f350d177d15776f7874b5c4d0e68a5b.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Competencia</p>
+                                </div>
                             }
-                        </div>
-                        <div class="penca-card-content-title">
-                            <p style="color:white">@penca.nombre</p>
-                        </div>
-                        @if (penca.tipoDeporte.ToString().Equals("Futbol"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Futbol</p>
+                            <br>
+                            <div class="penca-card-content-button">
+                                <button mat-raised-button class="fcc-btn" @onclick="() => verPenca(penca.id, 0)">Detalles</button>
                             </div>
-                        }
-                        else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Basketball</p>
-                            </div>
-                        }
-                        else if (penca.tipoDeporte.ToString().Equals("Tenis"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Tenis</p>
-                            </div>
-                        }
-                        else if (penca.tipoDeporte.ToString().Equals("Voley"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Voley</p>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Competencia</p>
-                            </div>
-                        }
-                        <div class="penca-card-content-price">
-                            <p style="color:white">Precio: <span>$@penca.entrada</span></p>
-                        </div>
-                        <br>
-                        <div class="penca-card-content-button">
-                            <button mat-raised-button @onclick="() => verPenca(penca.id, 0)">Detalles</button>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-        @foreach (var penca in listaPE)
-        {
-            <div class="column">
-                <div class="card">
-                    <div class="penca-card-content">
-                        <div class="penca-card-image">
-                            @if (penca.tipoDeporte.ToString().Equals("Futbol"))
+            }
+            else if (penca.tipoPenca.ToString().Equals("Empresa"))
+            {
+                <div class="column">
+                    <div class="card" style="background-color:rgb(160, 47, 47);">
+                        <div class="penca-card-content">
+                            <div class="penca-card-image">
+                                @if (penca.tipo_Deporte.ToString().Equals("Futbol"))
+                                {
+                                    <img src="https://img.freepik.com/vector-premium/logotipo-futbol-boot-patea-pelota-ilustracion-vectorial_183342-393.jpg">
+                                }
+                                else if (penca.tipo_Deporte.ToString().Equals("Basquetball"))
+                                {
+                                    <img src="https://img.freepik.com/premium-vector/basketball-logo_260747-419.jpg">
+                                }
+                                else if (penca.tipo_Deporte.ToString().Equals("Tenis"))
+                                {
+                                    <img src="https://img.freepik.com/premium-vector/tennis-logo-icon-design-sports-badge-template-vector-illustration_630259-74.jpg">
+                                }
+                                else if (penca.tipo_Deporte.ToString().Equals("Voley"))
+                                {
+                                    <img src="https://media.istockphoto.com/id/1398748252/vector/classic-volley-club-logo-tournament-volleyball-design-vector-on-white-background.jpg?s=612x612&w=0&k=20&c=JLgMqsZReDH2XzuO0IEubm58807P_8_62xeBfdlQTf8=">
+                                }
+                                else
+                                {
+                                    <img src="https://i.pinimg.com/originals/6f/35/0d/6f350d177d15776f7874b5c4d0e68a5b.jpg">
+                                }
+                            </div>
+                            <div class="penca-card-content-title">
+                                <p style="color:white">@penca.nombre</p>
+                            </div>
+                            @if (penca.tipo_Deporte.ToString().Equals("Futbol"))
                             {
-                                <img src="https://img.freepik.com/vector-premium/logotipo-futbol-boot-patea-pelota-ilustracion-vectorial_183342-393.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Futbol</p>
+                                </div>
                             }
-                            else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
+                            else if (penca.tipo_Deporte.ToString().Equals("Basquetball"))
                             {
-                                <img src="https://img.freepik.com/premium-vector/basketball-logo_260747-419.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Basketball</p>
+                                </div>
                             }
-                            else if (penca.tipoDeporte.ToString().Equals("Tenis"))
+                            else if (penca.tipo_Deporte.ToString().Equals("Tenis"))
                             {
-                                <img src="https://img.freepik.com/premium-vector/tennis-logo-icon-design-sports-badge-template-vector-illustration_630259-74.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Tenis</p>
+                                </div>
                             }
-                            else if (penca.tipoDeporte.ToString().Equals("Voley"))
+                            else if (penca.tipo_Deporte.ToString().Equals("Voley"))
                             {
-                                <img src="https://i.pinimg.com/736x/9c/c2/05/9cc20507041e1dbfc1f772ac42b43390.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Voley</p>
+                                </div>
                             }
                             else
                             {
-                                <img src="https://i.pinimg.com/originals/6f/35/0d/6f350d177d15776f7874b5c4d0e68a5b.jpg">
+                                <div class="penca-card-content-address mat-hint">
+                                    <p style="color:white">Deporte: Competencia</p>
+                                </div>
                             }
-                        </div>
-                        <div class="penca-card-content-title">
-                            <p style="color:white">@penca.nombre</p>
-                        </div>
-                        @if (penca.tipoDeporte.ToString().Equals("Futbol"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Futbol</p>
+                            <br>
+                            <div class="penca-card-content-button">
+                                <button mat-raised-button class="fcc-btn" @onclick="() => verPenca(penca.id, 1)">Detalles</button>
                             </div>
-                        }
-                        else if (penca.tipoDeporte.ToString().Equals("Basquetball"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Basketball</p>
-                            </div>
-                        }
-                        else if (penca.tipoDeporte.ToString().Equals("Tenis"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Tenis</p>
-                            </div>
-                        }
-                        else if (penca.tipoDeporte.ToString().Equals("Voley"))
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Voley</p>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="penca-card-content-address mat-hint">
-                                <p style="color:white">Deporte: Competencia</p>
-                            </div>
-                        }
-                        <div class="penca-card-content-price">
-                            <p style="color:white">Precio: <span>$@penca.entrada</span></p>
-                        </div>
-                        <br>
-                        <div class="penca-card-content-button">
-                            <button mat-raised-button @onclick="() => verPenca(penca.id, 1)">Detalles</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
+
         }
         <div infiniteScroll></div>
     </div>
@@ -235,7 +234,29 @@ else
 
     private async void verPenca(int id, int tipoPenca)
     {
-        if(tipoPenca == 0)
+        var response = await AppService.SeleccionarPenca(id);
+        var penca = new Penca
+            {
+                id = response.id,
+                nombre = response.nombre,
+                estado = response.estado,
+                fecha_Creacion = response.fecha_Creacion,
+                tipo_Penca = response.tipo_Penca,
+                tipo_Deporte = response.tipo_Deporte,
+                foro = response.foro,
+                premio_empresa = response.premio_empresa,
+                tipo_Plan = response.tipo_Plan,
+                entrada = response.entrada,
+                pozo = response.pozo,
+                tipo_Liga = response.tipo_Liga
+        };    
+
+        string infoPenca = JsonConvert.SerializeObject(penca);
+        await SecureStorage.SetAsync(nameof(Setting.PencaDetail), infoPenca);
+        Setting.PencaDetail = penca;
+            
+        
+            /*if(tipoPenca == 0)
         {
             var response = await AppService.SeleccionarPencaC(id);
             var penca = new PencaCompartida
@@ -252,7 +273,7 @@ else
 
             string infoPencaC = JsonConvert.SerializeObject(penca);
             await SecureStorage.SetAsync(nameof(Setting.PencaCompartidaDetail), infoPencaC);
-            Setting.PencaCompartidaDetail = penca;
+            Setting.PencaCompatidaDetail = penca;
         }
         else
         {
@@ -266,16 +287,15 @@ else
                 premioFinal = response.premioFinal,
                 idLiga = response.idLiga,
                 tipo_Liga = response.tipo_Liga,
-                tipoPlan = response.tipoPlan,
+                tipo_Plan = response.tipo_Plan,
                 idEmpresa = response.idEmpresa
             };
 
             string infoPencaE = JsonConvert.SerializeObject(penca);
-            await SecureStorage.SetAsync(nameof(Setting.PencaEmpresaDetail), infoPencaE);
+            await SecureStorage.SetAsync(nameof(Setting.PencaDetail), infoPencaE);
             Setting.PencaEmpresaDetail = penca;
-        }
+        }*/
         NavManager.NavigateTo("/infoPenca");
-        }
-        //this.StateHasChanged();
     }
+    //this.StateHasChanged();
 }

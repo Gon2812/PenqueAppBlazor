@@ -69,16 +69,16 @@ namespace PenqueAppMobile.Services
                     var pencas = JsonConvert.DeserializeObject<List<Penca>>(contentStr);
                     foreach (var aux in pencas)
                     {
-                        if (aux.Tipo_Penca == 0)
+                        if (aux.tipo_Penca.ToString().Equals("Compartida"))
                         {
                             var r = new PencaCompartida();
-                            r.id = aux.Id;
-                            r.nombre = aux.Nombre;
-                            r.tipoDeporte = aux.Tipo_Deporte;
-                            r.entrada = aux.Entrada;
-                            r.pozo = aux.Pozo;
-                            r.tipo_Liga = aux.Tipo_Liga;
-                            r.estado = aux.Estado;
+                            r.id = aux.id;
+                            r.nombre = aux.nombre;
+                            r.tipoDeporte = aux.tipo_Deporte;
+                            r.entrada = aux.entrada;
+                            r.pozo = aux.pozo;
+                            r.tipo_Liga = aux.tipo_Liga;
+                            r.estado = aux.estado;
                             returnResponse.Add(r);
                         }
                     }
@@ -102,8 +102,37 @@ namespace PenqueAppMobile.Services
                     var pencas = JsonConvert.DeserializeObject<List<Penca>>(contentStr);
                     foreach (var aux in pencas)
                     {
-                        returnResponse.Add(aux);
+                        var r = new Penca();
+                        r.id = aux.id;
+                        r.nombre = aux.nombre;
+                        r.estado = aux.estado;
+                        r.fecha_Creacion = aux.fecha_Creacion;
+                        r.tipo_Deporte = aux.tipo_Deporte;
+                        r.tipo_Liga = aux.tipo_Liga;
+                        r.tipo_Plan = aux.tipo_Plan;
+                        r.entrada = aux.entrada;
+                        r.pozo = aux.pozo;
+                        r.color = aux.color;
+                        r.tipoPenca= aux.tipoPenca;
+
+                        returnResponse.Add(r);
                     }
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<Penca> SeleccionarPenca(int id)
+        {
+            var returnResponse = new Penca();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.SeleccionarPenca}{id}";
+                var response = await p.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<Penca>(contentStr);
                 }
             }
             return returnResponse;
@@ -447,12 +476,12 @@ namespace PenqueAppMobile.Services
             return returnResponse;
         }
 
-        public async Task<int> PrediccionPartidoU(int idPartido, int idUsuario)
+        public async Task<int> PrediccionPartidoU(int idPartido, int idUsuario, int idPenca)
         {
             var returnResponse = new int();
             using (var p = new HttpClient())
             {
-                var url = $"{Setting.BaseUrl}{APIs.PrediccionPartUsu}{idUsuario}{APIs.PrediccionPartUsu2}{idPartido}";
+                var url = $"{Setting.BaseUrl}{APIs.PrediccionPartUsu}{idUsuario}{APIs.PrediccionPartUsu2}{idPartido}{APIs.PrediccionPartUsu3}{idPenca}";
                 var response = await p.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {

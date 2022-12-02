@@ -9,8 +9,9 @@ namespace PenqueAppMobile.Models
     internal class Setting
     {
         public static Usuario UserBasicDetail { get; set; }
-        public static PencaCompartida PencaCompartidaDetail { get; set; }
-        public static PencaEmpresa PencaEmpresaDetail { get; set; }
+        public static Penca PencaDetail { get; set; }
+        //public static PencaCompartida PencaCompartidaDetail { get; set; }
+        //public static PencaEmpresa PencaEmpresaDetail { get; set; }
         public static Partido PartidoDetail { get; set; }
         public static Competencia CompetenciaDetail { get; set; }
         public static Liga_Equipo LigaEquipoDetail { get; set; }

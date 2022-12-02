@@ -13,7 +13,7 @@ namespace PenqueAppMobile.Models
         public const string ListarPencas = "/api/Penca";
         public const string ListarPencasUsuario = "/api/Usuario/misPencas/";
         public const string SeleccionarPenca = "/api/Penca/";
-        public const string VerLigas = "/api/Penca/getIdLiga/";
+        public const string VerLigas = "/api/Penca/getIdLIga/";
         public const string verPartidos = "/api/LigaEquipo/getPartidos/";
         public const string verCompetencias = "/api/LigaIndividual/mostrarCompetencias/";
         public const string verListaMensajes = "/api/Usuario/mostrarChats?idUsuario=";
@@ -34,6 +34,6 @@ namespace PenqueAppMobile.Models
         public const string PredecirPartido = "/api/Usuario/predecirUnPartido";
         public const string PrediccionPartUsu = "/api/Usuario/verPrediccionPartido?id=";
         public const string PrediccionPartUsu2 = "&idPartido=";
-
+        public const string PrediccionPartUsu3 = "&idPenca=";
     }
 }

@@ -13,6 +13,7 @@ namespace PenqueAppMobile.Services
         Task<(bool IsSuccess, string ErrorMessage)> RegisterUser(RegistrationModel registerUser);
         public Task<List<PencaCompartida>> ListaPencasCompartidas();
         public Task<List<Penca>> ListaPencasUsuario(int idUsu);
+        public Task<Penca> SeleccionarPenca(int id);
         public Task<PencaCompartida> SeleccionarPencaC(int id);
         public Task<PencaEmpresa> SeleccionarPencaE(int id);
         public Task<int> verLiga(int id);
@@ -32,6 +33,6 @@ namespace PenqueAppMobile.Services
         public Task<Liga_Equipo> SeleccionarLigaE(int id);
         public Task<Liga_Individual> SeleccionarLigaI(int id);
         public Task<Prediccion> PredecirPartido(Prediccion prediccion);
-        public Task<int> PrediccionPartidoU(int idPartido, int idUsuario);
+        public Task<int> PrediccionPartidoU(int idPartido, int idUsuario, int idPenca);
     }
 }

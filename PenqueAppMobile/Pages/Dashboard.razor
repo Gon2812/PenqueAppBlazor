@@ -6,7 +6,7 @@
 @inject IAppService AppService
 
 @{
-    var id = Setting.PencaCompartidaDetail.id;
+    var id = Setting.PencaDetail.id;
     var puntos = AsyncUtil.RunSync<List<DtPuntaje>>(() => getPuntajes(id));
 
 }
@@ -35,11 +35,18 @@
     </table>
 </section>
 
+<button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
+
 @code{
     private async Task<List<DtPuntaje>> getPuntajes(int id)
     {
         List<DtPuntaje> listaP = await Task.Run(() => AppService.getPosiciones(id));
 
         return listaP;
+    }
+
+    private void atras()
+    {
+        NavManager.NavigateTo("/infoPenca");
     }
 }

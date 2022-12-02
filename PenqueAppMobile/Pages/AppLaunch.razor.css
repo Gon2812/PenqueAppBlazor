@@ -1,7 +1,4 @@
-﻿body {
-}
-
-<style >
+﻿<style >
 * {
     box-sizing: border-box;
 }
@@ -181,6 +178,6 @@ button {
         background-color: #223094;
     }
 
-small{
-    color:black;
+small {
+    color: black;
 }

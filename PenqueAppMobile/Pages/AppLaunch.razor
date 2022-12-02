@@ -7,6 +7,15 @@
 
 
 @{
+    /*if(Setting.PencaEmpresaDetail != null)
+    {
+        Setting.PencaEmpresaDetail = null;
+    }
+    else if(Setting.PencaCompartidaDetail != null)
+    {
+        Setting.PencaCompartidaDetail = null;
+    }*/
+    
     var listaP = AsyncUtil.RunSync<List<PencaCompartida>>(() => GetListAsync());
 }
 
@@ -31,7 +40,7 @@
                         }
                         else if (penca.tipoDeporte.ToString().Equals("Voley"))
                         {
-                            <img src="https://i.pinimg.com/736x/9c/c2/05/9cc20507041e1dbfc1f772ac42b43390.jpg">
+                            <img src="https://media.istockphoto.com/id/1398748252/vector/classic-volley-club-logo-tournament-volleyball-design-vector-on-white-background.jpg?s=612x612&w=0&k=20&c=JLgMqsZReDH2XzuO0IEubm58807P_8_62xeBfdlQTf8=">
                         }
                         else
                         {
@@ -85,27 +94,32 @@
         }
     </div>
 
+
 @code {
     private async void verPenca(int id)
     {
-        var response = await AppService.SeleccionarPencaC(id);
+        var response = await AppService.SeleccionarPenca(id);
         if (response.nombre != null)
         {
-            var penca = new PencaCompartida
+            var penca = new Penca
             {
                 id = response.id,
                 nombre = response.nombre,
-                tipoDeporte = response.tipoDeporte,
+                tipo_Deporte = response.tipo_Deporte,
+                fecha_Creacion = response.fecha_Creacion,
+                tipo_Penca = response.tipo_Penca,
                 entrada = response.entrada,
+                tipo_Plan = response.tipo_Plan,
                 pozo = response.pozo,
-                idLiga = response.idLiga,
                 tipo_Liga = response.tipo_Liga,
-                estado = response.estado
+                estado = response.estado,
+                topeUsuarios = response.topeUsuarios
+ 
             };
 
             string infoPencaC = JsonConvert.SerializeObject(penca);
-            await SecureStorage.SetAsync(nameof(Setting.PencaCompartidaDetail), infoPencaC);
-            Setting.PencaCompartidaDetail = penca;
+            await SecureStorage.SetAsync(nameof(Setting.PencaDetail), infoPencaC);
+            Setting.PencaDetail = penca;
             NavManager.NavigateTo("/infoPenca");
         }
         else

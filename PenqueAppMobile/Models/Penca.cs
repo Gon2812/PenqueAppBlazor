@@ -34,41 +34,31 @@ namespace PenqueAppMobile.Models
 
     public class Penca
     {
-        public int Id { get; set; }
-
-        public string Nombre { get; set; }
-
-        public bool Estado { get; set; }
-
-        public DateTime Fecha_Creacion { get; set; }
-
-        public Tipo_Penca Tipo_Penca { get; set; }
-
-        public Tipo_Deporte Tipo_Deporte { get; set; }
-
-        public List<Mensaje> Foro { get; set; }
+        public int id { get; set; }
+        public string nombre { get; set; }
+        public bool estado { get; set; }
+        public DateTime fecha_Creacion { get; set; }
+        public Tipo_Penca tipo_Penca { get; set; }
+        public Tipo_Penca tipoPenca { get; set; }
+        public Tipo_Deporte tipo_Deporte { get; set; }
+        public List<Mensaje> foro { get; set; }
 
         //Empresa
-        public float? Premio_empresa { get; set; }
-
-        public Tipo_Plan? Tipo_Plan { get; set; }
+        public float? premio_empresa { get; set; }
+        public Tipo_Plan? tipo_Plan { get; set; }
 
         //Compartido
-        public float? Entrada { get; set; }
-
-        public float? Pozo { get; set; }
+        public float? entrada { get; set; }
+        public float? pozo { get; set; }
 
         //Relaciones
-        public Liga_Equipo Liga_Equipo { get; set; }
-        public Liga_Individual Liga_Individual { get; set; }
-
-        public List<Puntuacion> Participantes_puntos { get; set; } // Aca guarda todas las puntuaciones de cada participante para luego ranquearlo y entregar el premio
-
-        public Tipo_Liga Tipo_Liga { get; set; }
-
-        public string Color { get; set; }
-
+        public Liga_Equipo liga_Equipo { get; set; }
+        public Liga_Individual liga_Individual { get; set; }
+        public List<Puntuacion> participantes_puntos { get; set; } // Aca guarda todas las puntuaciones de cada participante para luego ranquearlo y entregar el premio
+ 
+        public Tipo_Liga tipo_Liga { get; set; }
+        public string color { get; set; }
         public int EmpresaId { get; set; }
-
+        public int topeUsuarios { get; set; }
     }
 }
