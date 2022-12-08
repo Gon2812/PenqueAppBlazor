@@ -19,7 +19,7 @@ namespace PenqueAppMobile.Models
         public static Mensaje casillaIndividual { get; set; }
 
         public static Competencia competencia { get; set; }
-        //public const string BaseUrl = "https://penqueapp-backend.azurewebsites.net";
-        public const string BaseUrl = "https://localhost:7210";
+        public const string BaseUrl = "https://penqueappbackazure.azurewebsites.net";
+        //public const string BaseUrl = "https://localhost:7210";
     }
 }

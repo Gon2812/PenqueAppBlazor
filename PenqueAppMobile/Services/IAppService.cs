@@ -34,5 +34,6 @@ namespace PenqueAppMobile.Services
         public Task<Liga_Individual> SeleccionarLigaI(int id);
         public Task<Prediccion> PredecirPartido(Prediccion prediccion);
         public Task<int> PrediccionPartidoU(int idPartido, int idUsuario, int idPenca);
+        public Task<EstadisticasPartido> Estadisticas(int idPartido);
     }
 }

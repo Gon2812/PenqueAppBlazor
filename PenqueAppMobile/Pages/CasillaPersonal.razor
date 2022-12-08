@@ -78,6 +78,8 @@
 </section>
 </EditForm>
 
+<button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
+
 @code{
     private async Task<List<Mensaje>> getCasillas(int id)
     {
@@ -112,5 +114,10 @@
         }
         _spinnerClass = "";
         this.StateHasChanged();
+    }
+    private void atras()
+    {
+
+        NavManager.NavigateTo("/misMensajes");
     }
 }

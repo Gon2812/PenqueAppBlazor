@@ -35,5 +35,6 @@ namespace PenqueAppMobile.Models
         public const string PrediccionPartUsu = "/api/Usuario/verPrediccionPartido?id=";
         public const string PrediccionPartUsu2 = "&idPartido=";
         public const string PrediccionPartUsu3 = "&idPenca=";
+        public const string EstadisticasPartido = "/api/Partido/estadisticasPartido/";
     }
 }

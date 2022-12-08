@@ -3,6 +3,7 @@
 @using PenqueAppMobile.Models
 @using PenqueAppMobile.Services
 @using Newtonsoft.Json
+@using ChartJs.Blazor.PieChart
 @inject NavigationManager NavManager;
 @inject IAppService AppService
 
@@ -34,6 +35,8 @@
                     </tbody>
                 </table>
             </div>
+            @if (Setting.UserBasicDetail != null)
+            {
             <div>
                 @if (@Setting.PartidoDetail.resultado.ToString().Equals("Indefinido"))
                 {
@@ -79,15 +82,21 @@
                 }
                 <h5 class="mat-h1 text-center colorP">Resultado: @Setting.PartidoDetail.resultado</h5>
             </div>
+            }
+            <div class="row">
+                <Chart Config="_configGraf"></Chart>
+            </div>
         </mat-list>
     </section>
 </EditForm>
 
+<br />
 <button class="button-49" role="button" @onclick="() => atras()">Atrás</button>
 
 
 @code
 {
+    private PieConfig _configGraf;
     private string _spinnerClass = "";
     Prediccion prediccion = new();
     private async void Submit()
@@ -102,6 +111,8 @@
         }
         _spinnerClass = "";
         this.StateHasChanged();
+        NavManager.NavigateTo("/infoPenca");
+        NavManager.NavigateTo("/verPartido");
     }
 
     private async Task<int> prediccionUsuario()
@@ -113,5 +124,42 @@
     private void atras()
     {
         NavManager.NavigateTo("/infoPenca");
+    }
+
+    protected override void OnInitialized()
+    {
+        RealizarConfiguracionGrafica();
+    }
+
+    private void RealizarConfiguracionGrafica()
+    {
+        _configGraf = new PieConfig();
+
+        _configGraf.Options = new PieOptions
+            {
+                Responsive = true,
+                Title = new OptionsTitle
+                {
+                    Display = true,
+                    Text = "Estadísticas de los Usuarios"
+                }
+
+            };
+        foreach(var item in new[] { "Empate", "Gana Local", "Gana Visitante" })
+        {
+            _configGraf.Data.Labels.Add(item);
+        }
+        //var estPartido = await AppService.Estadisticas(Setting.PartidoDetail.id);
+        var estPartido = AsyncUtil.RunSync<EstadisticasPartido>(() => AppService.Estadisticas(Setting.PartidoDetail.id));
+        PieDataset<int> dataset = new PieDataset<int>(new[] {  estPartido.empate, estPartido.local, estPartido.visitante})
+        {
+            BackgroundColor = new[]
+            {
+                ColorUtil.ColorHexString(184, 12, 248),//rojo empate
+                ColorUtil.ColorHexString(240, 222, 22),//verde local
+                ColorUtil.ColorHexString(101, 248, 12)//azul visitante
+            }
+        };
+        _configGraf.Data.Datasets.Add(dataset);
     }
 }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PenqueAppMobile.Data;
 using System.Text.Json;
+//using AVFoundation;
 
 namespace PenqueAppMobile.Services
 {
@@ -487,6 +488,22 @@ namespace PenqueAppMobile.Services
                 {
                     string contentStr = await response.Content.ReadAsStringAsync();
                     returnResponse = JsonConvert.DeserializeObject<int>(contentStr);
+                }
+            }
+            return returnResponse;
+        }
+
+        public async Task<EstadisticasPartido> Estadisticas(int idPartido)
+        {
+            var returnResponse = new EstadisticasPartido();
+            using (var p = new HttpClient())
+            {
+                var url = $"{Setting.BaseUrl}{APIs.EstadisticasPartido}{idPartido}";
+                var response = await p.GetAsync(url);
+                if(response.IsSuccessStatusCode)
+                {
+                    string contentStr = await response.Content.ReadAsStringAsync();
+                    returnResponse = JsonConvert.DeserializeObject<EstadisticasPartido>(contentStr);
                 }
             }
             return returnResponse;
