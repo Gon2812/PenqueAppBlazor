@@ -43,12 +43,15 @@
                     var pc = AsyncUtil.RunSync<int>(() => prediccionUsuario());
                     @if (pc == 3)
                     {
-                        <h4 class="mat-h1 text-center colorP">Prediccion:</h4>
-                        <select class="form-select" aria-label="Indefinido" @bind="prediccion.tipo">
-                            <option value="Indefinido" selected>Indefinido</option>
-                            <option value="Local">Gana local</option>
-                            <option value="Visitante">Gana visitante</option>
-                            <option value="Empate">Empate</option>
+                            <h4 class="mat-h1 text-center colorP">Prediccion:</h4>
+                            <select class="form-select" aria-label="Indefinido" @bind="prediccion.tipo">
+                                <option value="Indefinido" selected>Indefinido</option>
+                                <option value="Local">Gana local</option>
+                                <option value="Visitante">Gana visitante</option>
+                                @if (deporte.deporte.ToString().Equals("Futbol"))
+                                {
+                                    <option value="Empate">Empate</option>
+                                }
                         </select>
                         <button class="btn btn-primary" type="submit">
                             <span class="@_spinnerClass" role="status" aria-hidden="true"></span>
@@ -145,21 +148,42 @@
                 }
 
             };
-        foreach(var item in new[] { "Empate", "Gana Local", "Gana Visitante" })
+        if (Setting.PartidoDetail.deporte.ToString().Equals("Futbol"))
         {
-            _configGraf.Data.Labels.Add(item);
-        }
-        //var estPartido = await AppService.Estadisticas(Setting.PartidoDetail.id);
-        var estPartido = AsyncUtil.RunSync<EstadisticasPartido>(() => AppService.Estadisticas(Setting.PartidoDetail.id));
-        PieDataset<int> dataset = new PieDataset<int>(new[] {  estPartido.empate, estPartido.local, estPartido.visitante})
-        {
-            BackgroundColor = new[]
+            foreach(var item in new[] { "Empate", "Gana Local", "Gana Visitante" })
             {
-                ColorUtil.ColorHexString(184, 12, 248),//rojo empate
-                ColorUtil.ColorHexString(240, 222, 22),//verde local
-                ColorUtil.ColorHexString(101, 248, 12)//azul visitante
+                _configGraf.Data.Labels.Add(item);
             }
-        };
-        _configGraf.Data.Datasets.Add(dataset);
+            //var estPartido = await AppService.Estadisticas(Setting.PartidoDetail.id);
+            var estPartido = AsyncUtil.RunSync<EstadisticasPartido>(() => AppService.Estadisticas(Setting.PartidoDetail.id));
+            PieDataset<int> dataset = new PieDataset<int>(new[] {  estPartido.empate, estPartido.local, estPartido.visitante})
+            {
+                BackgroundColor = new[]
+                {
+                    ColorUtil.ColorHexString(184, 12, 248),//violeta empate
+                    ColorUtil.ColorHexString(240, 222, 22),//amarillo local
+                    ColorUtil.ColorHexString(101, 248, 12)//verde visitante
+                }
+            };
+            _configGraf.Data.Datasets.Add(dataset);
+        }
+        else
+        {
+            foreach (var item in new[] { "Gana Local", "Gana Visitante" })
+            {
+                _configGraf.Data.Labels.Add(item);
+            }
+            //var estPartido = await AppService.Estadisticas(Setting.PartidoDetail.id);
+            var estPartido = AsyncUtil.RunSync<EstadisticasPartido>(() => AppService.Estadisticas(Setting.PartidoDetail.id));
+            PieDataset<int> dataset = new PieDataset<int>(new[] { estPartido.local, estPartido.visitante })
+                {
+                    BackgroundColor = new[]
+                    {
+                    ColorUtil.ColorHexString(240, 222, 22),//amarillo local
+                    ColorUtil.ColorHexString(101, 248, 12)//verde visitante
+                }
+                };
+            _configGraf.Data.Datasets.Add(dataset);
+        }
     }
 }
