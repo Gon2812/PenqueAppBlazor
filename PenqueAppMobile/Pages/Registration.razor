@@ -8,35 +8,35 @@
 <EditForm Model="@registrationModel" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
     <div class="card">
-        <h3>Registration</h3>
+        <h3>Registrarse</h3>
         <div class="form-group">
-            <label>Email address</label>
-            <input type="email" @bind-value="@registrationModel.Email" class="form-control" placeholder="Enter email">
+            <label>Correo electrónico</label>
+            <input type="email" @bind-value="@registrationModel.Email" class="form-control" placeholder="Introduzca su email">
             <ValidationMessage For="@(()=> registrationModel.Email)" />
         </div>
 
         <div class="form-group">
-            <label>Name</label>
-            <input class="form-control" @bind-value="@registrationModel.Nombre" placeholder="Enter Name">
+            <label>Nombre</label>
+            <input class="form-control" @bind-value="@registrationModel.Nombre" placeholder="Introduzca su nombre">
             <ValidationMessage For="@(()=> registrationModel.Nombre)" />
         </div>
 
         <div class="mt-2 form-group">
-            <label>Password</label>
-            <input type="password" @bind-value="@registrationModel.Password" class="form-control" placeholder="Password">
+            <label>Contraseña</label>
+            <input type="password" @bind-value="@registrationModel.Password" class="form-control" placeholder="Introduzca su contraseña">
             <ValidationMessage For="@(()=> registrationModel.Password)" />
         </div>
 
         <div class="mt-2 text-end">
             <NavLink class="nav-link" href="login">
-                <span>Already have account?</span>
+                <span>Ya tienes una cuenta?</span>
             </NavLink>
         </div>
 
         <div class="text-center mt-2">
             <button class="btn btn-primary" type="submit">
                 <span class="@_spinnerClass" role="status" aria-hidden="true"></span>
-                Register
+                Registrarse
             </button>
             <a class="fcc-btn" href="">Atras</a>
         </div>

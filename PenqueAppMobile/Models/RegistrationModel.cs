@@ -9,11 +9,11 @@ namespace PenqueAppMobile.Models
 {
     public class RegistrationModel
     {
-        [Required]
+        [Required(ErrorMessage = "Debe ingresar un correo electrónico válido.")]
         public string Email { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Debe ingresar un nombre.")]
         public string Nombre { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Debe ingresar una contraseña.")]
         public string Password { get; set; }
     }
 }
